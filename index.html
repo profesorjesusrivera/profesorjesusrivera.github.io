@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplicación y Suma Automática con PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .resultados {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .resultado {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora Automática de Multiplicación y Suma</h2>
+
+        <label for="numeroA">Número A:</label>
+        <input type="number" id="numeroA">
+
+        <label for="numeroB">Número B:</label>
+        <input type="number" id="numeroB">
+
+        <div class="resultados">
+            <p class="resultado">3 * A = <span id="resultadoA">--</span></p>
+            <p class="resultado">3 * B = <span id="resultadoB">--</span></p>
+            <p class="resultado">Suma = <span id="sumaResultado">--</span></p>
+        </div>
+
+        <button id="generarPDF">Generar PDF con Resultados</button>
+    </div>
+
+    <!-- Incluir jsPDF desde CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        function calcularResultados() {
+            // Obtener los valores de A y B
+            const numeroA = parseFloat(document.getElementById("numeroA").value) || 0;
+            const numeroB = parseFloat(document.getElementById("numeroB").value) || 0;
+            
+            // Calcular 3 * A, 3 * B y la suma
+            const resultadoA = 3 * numeroA;
+            const resultadoB = 3 * numeroB;
+            const suma = resultadoA + resultadoB;
+            
+            // Mostrar los resultados en la página
+            document.getElementById("resultadoA").innerText = resultadoA;
+            document.getElementById("resultadoB").innerText = resultadoB;
+            document.getElementById("sumaResultado").innerText = suma;
+        }
+
+        // Agregar eventos a los inputs para que al cambiar los valores se actualicen los resultados
+        document.getElementById("numeroA").addEventListener("input", calcularResultados);
+        document.getElementById("numeroB").addEventListener("input", calcularResultados);
+
+        // Función para generar el PDF
+        document.getElementById("generarPDF").addEventListener("click", function() {
+            // Obtener los valores de los resultados actuales
+            const resultadoA = document.getElementById("resultadoA").innerText;
+            const resultadoB = document.getElementById("resultadoB").innerText;
+            const sumaResultado = document.getElementById("sumaResultado").innerText;
+
+            // Crear un nuevo documento PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Agregar contenido al PDF
+            doc.text("Resultados de la Calculadora", 10, 10);
+            doc.text(`3 * A = ${resultadoA}`, 10, 20);
+            doc.text(`3 * B = ${resultadoB}`, 10, 30);
+            doc.text(`Suma = ${sumaResultado}`, 10, 40);
+
+            // Descargar el PDF
+            doc.save("resultados.pdf");
+        });
+    </script>
+</body>
+</html>
+
+
